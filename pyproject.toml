@@ -1,0 +1,55 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "citefix"
+version = "0.1.0"
+description = "AGLC4 citation auto-formatter — upload a Word doc, get back fixed footnotes"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.11"
+
+dependencies = [
+    "fastapi>=0.111",
+    "uvicorn[standard]>=0.30",
+    "python-multipart>=0.0.9",   # FastAPI file uploads
+    "python-docx>=1.1",          # .docx read/write
+    "lxml>=5.2",                 # Low-level XML for footnote manipulation
+    "regex>=2024.5",             # Unicode-aware regex (better than stdlib re)
+    "pydantic>=2.7",             # Data models
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.23",
+    "httpx>=0.27",               # For testing FastAPI
+    "ruff>=0.5",
+    "mypy>=1.10",
+]
+ai = [
+    "anthropic>=0.28",           # Optional AI fallback for ambiguous citations
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "I", "N", "UP", "B", "SIM", "RUF"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["citefix"]
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+disallow_untyped_defs = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
